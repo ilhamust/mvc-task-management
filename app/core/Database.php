@@ -1,17 +1,26 @@
 <?php
-class Database {
-    private $host = "localhost";
-    private $user = "root";
-    private $pass = "";
-    private $dbname = "eisenhower_db";
 
-    public $conn;
+class Database {
+    private $server = "localhost";
+    private $username = "root";
+    private $password = "";
+    private $dbname = "eisenhower_db";
+    private $connect;
 
     public function __construct() {
-        $this->conn = new mysqli($this->host, $this->user, $this->pass, $this->dbname);
+        $this->connect = mysqli_connect(
+            $this->server,
+            $this->username,
+            $this->password,
+            $this->dbname
+        );
 
-        if ($this->conn->connect_error) {
-            die("Connection failed: " . $this->conn->connect_error);
+        if (!$this->connect) {
+            die("Connection failed: " . mysqli_connect_error());
         }
+    }
+
+    public function getConnection() {
+        return $this->connect;
     }
 }
