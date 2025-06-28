@@ -6,7 +6,7 @@ require_once '../app/core/Router.php';
 $router = new Router();
 
 // Routing
-$router->addRoute('', 'TaskController@index');  // Root URL
+$router->addRoute('', 'HomeController@index');  // Root URL
 $router->addRoute('task', 'TaskController@index');
 
 // Jalankan router
