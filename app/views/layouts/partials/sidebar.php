@@ -1,77 +1,54 @@
 <?php
 $currentUrl = $_SERVER['REQUEST_URI'];
-$isActive = function($url) use ($currentUrl) {
-    return strpos($currentUrl, $url) !== false ? 'active' : '';
-};
+$isDashboardActive = (strpos($currentUrl, '/dashboard') !== false && strpos($currentUrl, '/tasks') === false);
+$isTasksActive = (strpos($currentUrl, '/tasks') !== false);
 ?>
 
-<div class="p-6">
-    <!-- Logo Section -->
-    <div class="flex items-center mb-8 p-3">
-        <div class="w-10 h-10 gradient-bg rounded-xl flex items-center justify-center mr-3 shadow-lg">
-            <i class="fas fa-chess-queen text-white text-lg"></i>
-        </div>
-        <div>
-            <h2 class="text-xl font-bold text-gray-800">Eisenhower</h2>
-            <p class="text-xs text-gray-500">Matrix Organizer</p>
-        </div>
-    </div>
-
-    <!-- Navigation -->
-    <nav class="space-y-2 mb-8">
-        <a href="/eisenhower-app/public/" 
-           class="nav-item <?= $isActive('/public/') && !$isActive('/tasks') ? 'active' : '' ?> flex items-center p-4 rounded-xl group">
-            <i class="fas fa-home w-5 text-center mr-3"></i>
-            <span class="font-medium">Dashboard</span>
-        </a>
-        <a href="/eisenhower-app/public/tasks" 
-           class="nav-item <?= $isActive('/tasks') ? 'active' : '' ?> flex items-center p-4 rounded-xl">
-            <i class="fas fa-tasks w-5 text-center mr-3"></i>
-            <span class="font-medium">Manajemen Tugas</span>
-        </a>
-        <a href="/eisenhower-app/public/analytics" 
-           class="nav-item <?= $isActive('/analytics') ? 'active' : '' ?> flex items-center p-4 rounded-xl">
-            <i class="fas fa-chart-pie w-5 text-center mr-3"></i>
-            <span class="font-medium">Analitik</span>
-        </a>
-        <a href="/eisenhower-app/public/settings" 
-           class="nav-item <?= $isActive('/settings') ? 'active' : '' ?> flex items-center p-4 rounded-xl">
-            <i class="fas fa-cog w-5 text-center mr-3"></i>
-            <span class="font-medium">Pengaturan</span>
-        </a>
-    </nav>
-
-    <!-- Quick Actions -->
-    <div class="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-4 mb-6 border border-blue-100">
-        <h3 class="font-semibold text-gray-800 mb-3 flex items-center">
-            <i class="fas fa-bolt text-blue-500 mr-2"></i>
-            Aksi Cepat
-        </h3>
-        <button class="quick-action-btn w-full text-left p-2 text-sm text-gray-600 hover:bg-blue-50 rounded-lg mb-2">
-            <i class="fas fa-plus mr-2"></i> Tambah Tugas Baru
-        </button>
-        <button class="quick-action-btn w-full text-left p-2 text-sm text-gray-600 hover:bg-purple-50 rounded-lg">
-            <i class="fas fa-download mr-2"></i> Export Data
-        </button>
-    </div>
-</div>
-
-<!-- User Profile (Fixed at bottom) -->
-<div class="absolute bottom-6 left-6 right-6">
-    <div class="bg-white rounded-2xl p-4 shadow-lg border border-gray-100 hover-lift">
-        <div class="flex items-center">
-            <div class="profile-avatar w-12 h-12 rounded-xl flex items-center justify-center text-white font-bold text-lg mr-3 shadow-md">
-                <i class="fas fa-user"></i>
+<div class="h-full flex flex-col" x-data="{ mobileMenuOpen: false }" @toggle-mobile-menu.window="mobileMenuOpen = !mobileMenuOpen">
+    <!-- Mobile Overlay -->
+    <div x-show="mobileMenuOpen" x-transition:enter="transition-opacity ease-linear duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="transition-opacity ease-linear duration-300" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="fixed inset-0 bg-gray-600 bg-opacity-75 z-40 md:hidden"></div>
+    
+    <!-- Sidebar Content -->
+    <div class="flex flex-col h-full" :class="mobileMenuOpen ? 'fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-xl md:relative md:z-auto' : ''">
+        <div class="p-6 flex-1">
+            <!-- Logo Section -->
+            <div class="flex items-center mb-8 p-3">
+                <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center mr-3 shadow-lg">
+                    <i class="fas fa-chess-queen text-white text-lg"></i>
+                </div>
+                <div>
+                    <h2 class="text-xl font-bold text-gray-800">Eisenhower</h2>
+                    <p class="text-xs text-gray-500">Matrix Organizer</p>
+                </div>
             </div>
-            <div class="flex-1">
-                <p class="font-semibold text-gray-800"><?= $user['name'] ?? 'John Doe' ?></p>
-                <p class="text-sm text-gray-500"><?= $user['plan'] ?? 'Premium User' ?></p>
-            </div>
-            <div class="relative">
-                <button class="text-gray-400 hover:text-gray-600 cursor-pointer">
-                    <i class="fas fa-bell"></i>
-                    <span class="notification-dot absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></span>
-                </button>
+
+            <!-- Navigation -->
+            <nav class="space-y-2">
+                <a href="/eisenhower-app/public/dashboard" 
+                   class="<?= $isDashboardActive ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg' : 'text-gray-600 hover:bg-gray-100' ?> flex items-center p-4 rounded-xl transition-all duration-200 group">
+                    <i class="fas fa-home w-5 text-center mr-3"></i>
+                    <span class="font-medium">Dashboard</span>
+                </a>
+                <a href="/eisenhower-app/public/tasks" 
+                   class="<?= $isTasksActive ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg' : 'text-gray-600 hover:bg-gray-100' ?> flex items-center p-4 rounded-xl transition-all duration-200">
+                    <i class="fas fa-tasks w-5 text-center mr-3"></i>
+                    <span class="font-medium">Manajemen Tugas</span>
+                </a>
+            </nav>
+        </div>
+
+        <!-- User Profile (Mobile Version) -->
+        <div class="p-6 md:hidden">
+            <div class="bg-gradient-to-br from-gray-50 to-blue-50 rounded-2xl p-4 border border-gray-100">
+                <div class="flex items-center">
+                    <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center text-white font-bold text-lg mr-3 shadow-md">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="flex-1">
+                        <p class="font-semibold text-gray-800"><?= $user['name'] ?? 'John Doe' ?></p>
+                        <p class="text-sm text-gray-500"><?= $user['plan'] ?? 'Premium User' ?></p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

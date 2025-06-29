@@ -1,60 +1,24 @@
 <?php
-
 class TaskController extends Controller {
-    private $taskModel;
-
-    public function __construct() {
-        $this->taskModel = $this->model('Task');
-    }
-
-    // Menampilkan semua task
-    public function index() {
-        $tasks = $this->taskModel->getAll();
-        $this->view('tasks/index', ['tasks' => $tasks]);
-    }
-
-    // Menampilkan form tambah task
-    public function create() {
-        $this->view('tasks/create');
-    }
-
-    // Menyimpan task baru
+  public function index() {
+    $title = 'Tasks - Eisenhower App';
+    $pageTitle = 'Daftar Tugas';
+    $pageSubtitle = 'Kelola dan lihat semua tugas Anda';
+    $view = '../app/views/tasks/index.php'; // Sesuaikan path view
+    require_once '../app/views/layouts/app.php';
+  }
+  
     public function store() {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $title = $_POST['title'];
-            $description = $_POST['description'];
-            $important = $_POST['important'];
-            $urgent = $_POST['urgent'];
-            $status = $_POST['status'];
+    require_once '../app/models/Tasks.php';
+    $taskModel = new Tasks();
 
-            $this->taskModel->create($title, $description, $important, $urgent, $status);
-            header('Location: /task');
-        }
-    }
+    $title = $_POST['title'];
+    $description = $_POST['description'];
+    $deadline = $_POST['deadline'];
+    $importance = $_POST['importance'];
 
-    // Menampilkan form edit task
-    public function edit($id) {
-        $task = $this->taskModel->getById($id);
-        $this->view('tasks/edit', ['task' => $task]);
-    }
+    $taskModel->insertTask($title, $description, $deadline, $importance);
 
-    // Update task
-    public function update($id) {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $title = $_POST['title'];
-            $description = $_POST['description'];
-            $important = $_POST['important'];
-            $urgent = $_POST['urgent'];
-            $status = $_POST['status'];
-
-            $this->taskModel->update($id, $title, $description, $important, $urgent, $status);
-            header('Location: /task');
-        }
-    }
-
-    // Delete task
-    public function delete($id) {
-        $this->taskModel->delete($id);
-        header('Location: /task');
-    }
+    header('Location: /eisenhower-app/public/tasks');
+  }
 }

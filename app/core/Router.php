@@ -8,23 +8,20 @@ class Router {
     }
 
     public function dispatch($requestUri) {
-        $basePath = trim(dirname($_SERVER['SCRIPT_NAME']), '/');
         $uri = parse_url($requestUri, PHP_URL_PATH);
 
-// Hilangkan base path dan index.php dari URI
-$basePath = dirname($_SERVER['SCRIPT_NAME']);
-$path = str_replace($basePath, '', $uri);
-$path = trim($path, '/');
+        // Hapus base folder jika project tidak di root
+        $baseFolder = '/eisenhower-app/public';
+        if (strpos($uri, $baseFolder) === 0) {
+            $uri = substr($uri, strlen($baseFolder));
+        }
 
-// Optional: jika URI = index.php, treat as ''
-if ($path === 'index.php') {
-    $path = '';
-}
+        // Bersihkan / di awal dan akhir
+        $path = trim($uri, '/');
 
-
-        // Hapus base path (jika folder proyek kamu bukan di root)
-        if ($basePath && strpos($path, $basePath) === 0) {
-            $path = trim(substr($path, strlen($basePath)), '/');
+        // Treat index.php as root
+        if ($path === 'index.php' || $path === '') {
+            $path = '';
         }
 
         if (array_key_exists($path, $this->routes)) {
