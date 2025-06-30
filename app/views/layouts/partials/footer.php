@@ -13,5 +13,7 @@
         <a href="#" class="hover:text-blue-600 transition-colors duration-200">Terms</a>
     </div>
 </div>
+<script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+<script src="/eisenhower-app/public/js/script.js"></script>
 </body>
 </html>
