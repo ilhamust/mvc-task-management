@@ -7,27 +7,31 @@ class Tasks extends Model {
     }
 
     public function insertTask($title, $description, $deadline, $importance) {
-        $status = 'pending'; // default saat task dibuat
+    $status = 'pending'; // default saat task dibuat
 
-        $stmt = $this->db->prepare("INSERT INTO tasks (title, description, deadline, importance, status) VALUES (?, ?, ?, ?, ?)");
-        $stmt->bind_param("sssss", $title, $description, $deadline, $importance, $status);
-        $stmt->execute();
-        $stmt->close();
-    }
+    // Tentukan urgency & quadrant sebelum insert
+    $urgency = $this->determineUrgency($deadline);
+    $quadrant = $this->determineQuadrant($importance, $urgency);
+
+    $stmt = $this->db->prepare("INSERT INTO tasks (title, description, deadline, importance, quadrant, status) VALUES (?, ?, ?, ?, ?, ?)");
+    $stmt->bind_param("ssssss", $title, $description, $deadline, $importance, $quadrant, $status);
+    $stmt->execute();
+    $stmt->close();
+}
+
 
 public function getActiveTasks() {
-    $sql = "SELECT * FROM tasks WHERE status='pending' ORDER BY deadline ASC";
+    $sql = "SELECT * FROM tasks WHERE status='pending' 
+            ORDER BY FIELD(quadrant, 'Quadrant 1', 'Quadrant 2', 'Quadrant 3', 'Quadrant 4'), deadline ASC";
     $result = mysqli_query($this->db, $sql);
 
     $tasks = [];
     if ($result) {
         while ($row = mysqli_fetch_assoc($result)) {
-            $row['urgency'] = $this->determineUrgency($row['deadline']);
-            $row['quadrant'] = $this->determineQuadrant($row['importance'], $row['urgency']);
+            // Tidak perlu menentukan quadrant di sini karena sudah ada di DB
             $tasks[] = $row;
         }
     } else {
-        // Debug cepat jika query gagal
         echo "Query Error: " . mysqli_error($this->db);
     }
 
@@ -35,19 +39,19 @@ public function getActiveTasks() {
 }
 
 
-    public function getCompletedTasks() {
-        $sql = "SELECT * FROM tasks WHERE status='completed' ORDER BY deadline ASC";
-        $result = mysqli_query($this->db, $sql);
+   public function getCompletedTasks() {
+    $sql = "SELECT * FROM tasks WHERE status='completed'
+            ORDER BY FIELD(quadrant, 'Quadrant 1', 'Quadrant 2', 'Quadrant 3', 'Quadrant 4'), deadline ASC";
+    $result = mysqli_query($this->db, $sql);
 
-        $tasks = [];
-        while ($row = mysqli_fetch_assoc($result)) {
-            $row['urgency'] = $this->determineUrgency($row['deadline']);
-            $row['quadrant'] = $this->determineQuadrant($row['importance'], $row['urgency']);
-            $tasks[] = $row;
-        }
-
-        return $tasks;
+    $tasks = [];
+    while ($row = mysqli_fetch_assoc($result)) {
+        $tasks[] = $row;
     }
+
+    return $tasks;
+}
+
 
     private function determineUrgency($deadline) {
     $today = new DateTime();
@@ -87,11 +91,16 @@ public function getTaskById($id) {
 }
 
 public function updateTask($id, $title, $description, $deadline, $importance) {
-  $stmt = $this->db->prepare("UPDATE tasks SET title=?, description=?, deadline=?, importance=? WHERE id=?");
-  $stmt->bind_param("ssssi", $title, $description, $deadline, $importance, $id);
-  $stmt->execute();
-  $stmt->close();
+    // Tentukan ulang urgency & quadrant
+    $urgency = $this->determineUrgency($deadline);
+    $quadrant = $this->determineQuadrant($importance, $urgency);
+
+    $stmt = $this->db->prepare("UPDATE tasks SET title=?, description=?, deadline=?, importance=?, quadrant=? WHERE id=?");
+    $stmt->bind_param("sssssi", $title, $description, $deadline, $importance, $quadrant, $id);
+    $stmt->execute();
+    $stmt->close();
 }
+
 
 public function deleteTask($id) {
   $stmt = $this->db->prepare("DELETE FROM tasks WHERE id = ?");
