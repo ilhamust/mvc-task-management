@@ -1,7 +1,13 @@
 <?php
 class DashboardController extends Controller {
   public function index() {
-    $title = 'Dashboard - Eisenhower App';
+    session_start();
+if (!isset($_SESSION['user_id'])) {
+  header('Location: /eisenhower-app/public/login');
+  exit;
+}
+$username = $_SESSION['username'];    
+$title = 'Dashboard - Eisenhower App';
     $pageTitle = 'Dashboard';
     $pageSubtitle = 'Kelola tugas dengan metode Eisenhower Matrix';
     $view = '../app/views/dashboard/index.php';

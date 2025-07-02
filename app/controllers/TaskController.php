@@ -1,6 +1,14 @@
 <?php
 class TaskController extends Controller {
+  
   public function index() {
+    session_start();
+if (!isset($_SESSION['user_id'])) {
+  header('Location: /eisenhower-app/public/login');
+  exit;
+}
+$username = $_SESSION['username'];   
+
     $title = 'Tasks - Eisenhower App';
     $pageTitle = 'Daftar Tugas';
     $pageSubtitle = 'Kelola dan lihat semua tugas Anda';

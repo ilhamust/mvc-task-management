@@ -14,7 +14,7 @@
                     <i class="fas fa-user text-sm"></i>
                 </div>
                 <div class="hidden md:block text-left">
-                    <p class="text-sm font-semibold text-gray-800"><?= $user['name'] ?? 'John Doe' ?></p>
+                    <p class="text-sm font-semibold text-gray-800"><?= htmlspecialchars($username) ?></p>
                 </div>
                 <i class="fas fa-chevron-down text-xs text-gray-400 transition-transform" :class="open ? 'rotate-180' : ''"></i>
             </button>
