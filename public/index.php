@@ -16,6 +16,7 @@ $router->addRoute('GET', 'register', 'AuthController@registerForm');
 $router->addRoute('POST', 'task/store', 'TaskController@store');
 $router->addRoute('POST', 'task/update', 'TaskController@update');
 $router->addRoute('POST', 'task/complete', 'TaskController@complete');
+$router->addRoute('POST', 'task/uncomplete', 'TaskController@uncomplete');
 $router->addRoute('POST', 'auth/login', 'AuthController@login');
 $router->addRoute('POST', 'auth/register', 'AuthController@register');
 

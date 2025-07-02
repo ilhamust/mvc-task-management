@@ -54,5 +54,24 @@ public function delete($id) {
 
   header('Location: /eisenhower-app/public/tasks');
 }
+public function complete() {
+  $taskId = $_POST['id'];
+  // Panggil model untuk update status menjadi selesai
+  $taskModel = $this->model('Tasks');
+  $taskModel->markAsCompleted($taskId);
+
+  header('Location: /eisenhower-app/public/tasks');
+  exit;
+}
+public function uncomplete() {
+  $taskId = $_POST['id'];
+  // Panggil model untuk update status menjadi active/kembali belum selesai
+  $taskModel = $this->model('Tasks');
+  $taskModel->markAsActive($taskId);
+
+  header('Location: /eisenhower-app/public/tasks');
+  exit;
+}
+
 
 }

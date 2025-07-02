@@ -99,5 +99,19 @@ public function deleteTask($id) {
   $stmt->execute();
   $stmt->close();
 }
+public function markAsCompleted($id) {
+    $stmt = $this->db->prepare("UPDATE tasks SET status = 'completed' WHERE id = ?");
+    if (!$stmt) {
+        die("Prepare failed: " . $this->db->error);
+    }
+    $stmt->bind_param("i", $id);
+    $stmt->execute();
+    $stmt->close();
+}
+public function markAsActive($id) {
+  $stmt = $this->db->prepare("UPDATE tasks SET status = 'pending' WHERE id = ?");
+  $stmt->execute([$id]);
+}
+
 
 }

@@ -46,14 +46,22 @@ function getQuadrantClass($quadrant) {
     <div class="divide-y divide-gray-100">
       <?php foreach ($activeTasks as $task): ?>
       <?php $quadrantStyle = getQuadrantClass($task['quadrant']); ?>
-      <div class="p-6 hover:bg-gray-50 transition-all duration-200" x-data="{ checked: false }">
+      <div class="p-6 hover:bg-gray-50 transition-all duration-200"
+        x-data="{ checked: <?= $task['status'] === 'completed' ? 'true' : 'false' ?> }">
         <div class="flex items-start gap-4">
-          <input type="checkbox" x-model="checked"
-            class="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500 transition-all duration-200">
+
+          <!-- Form untuk mark as completed -->
+          <form action="/eisenhower-app/public/task/complete" method="POST" class="inline">
+            <input type="hidden" name="id" value="<?= $task['id'] ?>">
+            <input type="checkbox" onchange="this.form.submit()"
+              class="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500 transition-all duration-200"
+              <?= $task['status'] === 'completed' ? 'checked disabled' : '' ?>>
+          </form>
 
           <div class="flex-1 min-w-0">
             <div class="flex items-center justify-between mb-2">
-              <h3 class="font-semibold text-gray-800 text-lg" :class="checked ? 'line-through text-gray-500' : ''">
+              <h3
+                class="font-semibold text-gray-800 text-lg <?= $task['status'] === 'completed' ? 'line-through text-gray-500' : '' ?>">
                 <?= htmlspecialchars($task['title']) ?>
               </h3>
               <span
@@ -83,10 +91,9 @@ function getQuadrantClass($quadrant) {
                   <i class="fas fa-trash mr-1"></i>Hapus
                 </a>
               </div>
-
             </div>
 
-            <p class="text-gray-600" :class="checked ? 'line-through' : ''">
+            <p class="text-gray-600 <?= $task['status'] === 'completed' ? 'line-through' : '' ?>">
               <?= htmlspecialchars($task['description']) ?>
             </p>
           </div>
@@ -94,7 +101,55 @@ function getQuadrantClass($quadrant) {
       </div>
       <?php endforeach; ?>
     </div>
+
   </div>
+
+<!-- Completed Tasks -->
+<div class="bg-white rounded-2xl shadow-lg border border-gray-100">
+  <div class="px-6 py-4 border-b border-gray-200 bg-gradient-to-r from-green-50 to-green-100">
+    <h2 class="font-bold text-gray-800 flex items-center">
+      <i class="fas fa-check mr-2 text-green-600"></i> Tugas Selesai
+    </h2>
+  </div>
+
+  <div class="divide-y divide-gray-100">
+    <?php foreach ($completedTasks as $task): ?>
+    <?php $quadrantStyle = getQuadrantClass($task['quadrant']); ?>
+    <div class="p-6 bg-gray-50">
+      <div class="flex items-start gap-4">
+
+        <!-- Form untuk uncomplete task -->
+        <form action="/eisenhower-app/public/task/uncomplete" method="POST" class="inline">
+          <input type="hidden" name="id" value="<?= $task['id'] ?>">
+          <input type="checkbox" checked onchange="this.form.submit()"
+            class="w-5 h-5 text-green-600 border-gray-300 rounded focus:ring-green-500 transition-all duration-200">
+        </form>
+
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center justify-between mb-2">
+            <h3 class="font-semibold text-gray-500 text-lg line-through">
+              <?= htmlspecialchars($task['title']) ?>
+            </h3>
+          </div>
+
+          <div class="flex items-center gap-3 mb-2">
+            <span class="w-3 h-3 rounded-full <?= $quadrantStyle['dot'] ?>"></span>
+            <span class="text-sm text-gray-500 flex items-center">
+              <i class="fas fa-calendar-alt mr-1"></i>
+              <?= date('d M Y', strtotime($task['deadline'])) ?>
+            </span>
+          </div>
+
+          <p class="text-gray-500 line-through">
+            <?= htmlspecialchars($task['description']) ?>
+          </p>
+        </div>
+      </div>
+    </div>
+    <?php endforeach; ?>
+  </div>
+</div>
+
 
   <!-- Modal Tambah Task -->
   <?php include '../app/views/tasks/modalTambah.php'; ?>
