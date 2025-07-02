@@ -3,18 +3,21 @@ require_once '../app/core/Autoload.php';
 
 $router = new Router();
 
-$router->addRoute('', 'AuthController@index');
-$router->addRoute('dashboard', 'DashboardController@index');
-$router->addRoute('tasks', 'TaskController@index');
-$router->addRoute('task/store', 'TaskController@store');
-$router->addRoute('task/update', 'TaskController@update');
-$router->addRoute('task/delete/{id}', 'TaskController@delete');
+// ROUTE GET
+$router->addRoute('GET', '', 'AuthController@index');
+$router->addRoute('GET', 'dashboard', 'DashboardController@index');
+$router->addRoute('GET', 'tasks', 'TaskController@index');
+$router->addRoute('GET', 'task/delete/{id}', 'TaskController@delete');
+$router->addRoute('GET', 'login', 'AuthController@index');
+$router->addRoute('GET', 'logout', 'AuthController@logout');
+$router->addRoute('GET', 'register', 'AuthController@registerForm');
 
-$router->addRoute('login', 'AuthController@index');
-$router->addRoute('auth/login', 'AuthController@login');
-$router->addRoute('logout', 'AuthController@logout');
-$router->addRoute('register', 'AuthController@registerForm');
-$router->addRoute('auth/register', 'AuthController@register');
+// ROUTE POST
+$router->addRoute('POST', 'task/store', 'TaskController@store');
+$router->addRoute('POST', 'task/update', 'TaskController@update');
+$router->addRoute('POST', 'task/complete', 'TaskController@complete');
+$router->addRoute('POST', 'auth/login', 'AuthController@login');
+$router->addRoute('POST', 'auth/register', 'AuthController@register');
 
-$router->dispatch($_SERVER['REQUEST_URI']);
-
+// DISPATCH dengan method
+$router->dispatch($_SERVER['REQUEST_URI'], $_SERVER['REQUEST_METHOD']);
