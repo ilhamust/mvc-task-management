@@ -1,32 +1,3 @@
-<?php
-// Sample data - replace with actual data from database
-$totalTasks = 24;
-$completedTasks = 8;
-$pendingTasks = 16;
-
-// Sample tasks data for matrix
-$tasks = [
-    'quadrant1' => [
-        ['id' => 1, 'title' => 'Presentasi Client Penting', 'due_date' => '2024-01-15', 'priority' => 'high'],
-        ['id' => 2, 'title' => 'Fix Bug Critical', 'due_date' => '2024-01-14', 'priority' => 'high'],
-        ['id' => 3, 'title' => 'Meeting dengan CEO', 'due_date' => '2024-01-16', 'priority' => 'high'],
-    ],
-    'quadrant2' => [
-        ['id' => 4, 'title' => 'Belajar Framework Baru', 'due_date' => '2024-01-25', 'priority' => 'medium'],
-        ['id' => 5, 'title' => 'Dokumentasi Proyek', 'due_date' => '2024-01-30', 'priority' => 'medium'],
-        ['id' => 6, 'title' => 'Perencanaan Strategis', 'due_date' => '2024-02-05', 'priority' => 'medium'],
-    ],
-    'quadrant3' => [
-        ['id' => 7, 'title' => 'Balas Email Marketing', 'due_date' => '2024-01-17', 'priority' => 'low'],
-        ['id' => 8, 'title' => 'Update Social Media', 'due_date' => '2024-01-18', 'priority' => 'low'],
-    ],
-    'quadrant4' => [
-        ['id' => 9, 'title' => 'Browsing Internet', 'due_date' => '2024-01-20', 'priority' => 'low'],
-        ['id' => 10, 'title' => 'Organize Desktop', 'due_date' => '2024-01-22', 'priority' => 'low'],
-    ]
-];
-?>
-
 <!-- Statistics Cards -->
 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
     <!-- Total Tasks -->
@@ -91,10 +62,6 @@ $tasks = [
 <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-6">
     <div class="flex items-center justify-between mb-6">
         <h2 class="text-xl font-bold text-gray-800">Eisenhower Matrix</h2>
-        <a href="/eisenhower-app/public/tasks" class="inline-flex items-center px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-xl hover:shadow-lg transition-all duration-200">
-            <i class="fas fa-plus mr-2"></i>
-            Tambah Tugas
-        </a>
     </div>
 
     <!-- Matrix Grid -->
@@ -118,14 +85,11 @@ $tasks = [
                                 <h4 class="font-semibold text-gray-800 text-sm mb-1"><?= $task['title'] ?></h4>
                                 <p class="text-xs text-gray-500 flex items-center">
                                     <i class="fas fa-calendar-alt mr-1"></i>
-                                    <?= date('d M Y', strtotime($task['due_date'])) ?>
+                                    <?= isset($task['deadline']) ? date('d M Y', strtotime($task['deadline'])) : '-' ?>
                                 </p>
                             </div>
                             <div class="flex items-center space-x-2">
                                 <span class="w-2 h-2 bg-red-500 rounded-full"></span>
-                                <button class="text-gray-400 hover:text-gray-600 text-sm">
-                                    <i class="fas fa-ellipsis-v"></i>
-                                </button>
                             </div>
                         </div>
                     </div>
@@ -152,14 +116,11 @@ $tasks = [
                                 <h4 class="font-semibold text-gray-800 text-sm mb-1"><?= $task['title'] ?></h4>
                                 <p class="text-xs text-gray-500 flex items-center">
                                     <i class="fas fa-calendar-alt mr-1"></i>
-                                    <?= date('d M Y', strtotime($task['due_date'])) ?>
+                                    <?= isset($task['deadline']) ? date('d M Y', strtotime($task['deadline'])) : '-' ?>
                                 </p>
                             </div>
                             <div class="flex items-center space-x-2">
                                 <span class="w-2 h-2 bg-green-500 rounded-full"></span>
-                                <button class="text-gray-400 hover:text-gray-600 text-sm">
-                                    <i class="fas fa-ellipsis-v"></i>
-                                </button>
                             </div>
                         </div>
                     </div>
@@ -186,14 +147,11 @@ $tasks = [
                                 <h4 class="font-semibold text-gray-800 text-sm mb-1"><?= $task['title'] ?></h4>
                                 <p class="text-xs text-gray-500 flex items-center">
                                     <i class="fas fa-calendar-alt mr-1"></i>
-                                    <?= date('d M Y', strtotime($task['due_date'])) ?>
+                                    <?= isset($task['deadline']) ? date('d M Y', strtotime($task['deadline'])) : '-' ?>
                                 </p>
                             </div>
                             <div class="flex items-center space-x-2">
                                 <span class="w-2 h-2 bg-yellow-500 rounded-full"></span>
-                                <button class="text-gray-400 hover:text-gray-600 text-sm">
-                                    <i class="fas fa-ellipsis-v"></i>
-                                </button>
                             </div>
                         </div>
                     </div>
@@ -220,14 +178,11 @@ $tasks = [
                                 <h4 class="font-semibold text-gray-800 text-sm mb-1"><?= $task['title'] ?></h4>
                                 <p class="text-xs text-gray-500 flex items-center">
                                     <i class="fas fa-calendar-alt mr-1"></i>
-                                    <?= date('d M Y', strtotime($task['due_date'])) ?>
+                                    <?= isset($task['deadline']) ? date('d M Y', strtotime($task['deadline'])) : '-' ?>
                                 </p>
                             </div>
                             <div class="flex items-center space-x-2">
                                 <span class="w-2 h-2 bg-gray-500 rounded-full"></span>
-                                <button class="text-gray-400 hover:text-gray-600 text-sm">
-                                    <i class="fas fa-ellipsis-v"></i>
-                                </button>
                             </div>
                         </div>
                     </div>
