@@ -13,9 +13,9 @@
         </div>
         <div class="mt-4 flex items-center">
             <div class="w-full bg-gray-200 rounded-full h-2">
-                <div class="bg-gradient-to-r from-blue-500 to-blue-600 h-2 rounded-full" style="width: <?= ($totalTasks > 0) ? ($completedTasks / $totalTasks * 100) : 0 ?>%"></div>
+                <div class="bg-gradient-to-r from-blue-500 to-blue-600 h-2 rounded-full" style="width: <?= ($totalTasks > 0) ? ($completedTasksCount / $totalTasks * 100) : 0 ?>%"></div>
             </div>
-            <span class="ml-3 text-xs text-gray-500"><?= $totalTasks > 0 ? round($completedTasks / $totalTasks * 100) : 0 ?>%</span>
+            <span class="ml-3 text-xs text-gray-500"><?= $totalTasks > 0 ? round($completedTasksCount / $totalTasks * 100) : 0 ?>%</span>
         </div>
     </div>
 
@@ -24,7 +24,7 @@
         <div class="flex items-center justify-between">
             <div>
                 <p class="text-sm font-medium text-gray-600 mb-1">Tugas Selesai</p>
-                <p class="text-3xl font-bold text-green-600"><?= $completedTasks ?></p>
+                <p class="text-3xl font-bold text-green-600"><?= $completedTasksCount ?></p>
             </div>
             <div class="w-14 h-14 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl flex items-center justify-center shadow-lg">
                 <i class="fas fa-check-circle text-white text-xl"></i>
@@ -33,7 +33,7 @@
         <div class="mt-4">
             <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
                 <i class="fas fa-arrow-up mr-1"></i>
-                +<?= $completedTasks ?> completed
+                +<?= $completedTasksCount ?> completed
             </span>
         </div>
     </div>

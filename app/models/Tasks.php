@@ -117,10 +117,31 @@ public function markAsCompleted($id) {
     $stmt->execute();
     $stmt->close();
 }
+
 public function markAsActive($id) {
   $stmt = $this->db->prepare("UPDATE tasks SET status = 'pending' WHERE id = ?");
-  $stmt->execute([$id]);
+  if (!$stmt) {
+      die("Prepare failed: " . $this->db->error);
+  }
+  $stmt->bind_param("i", $id);
+  $stmt->execute();
+  $stmt->close();
 }
 
+public function getAllTasks() {
+    $sql = "SELECT * FROM tasks ORDER BY FIELD(quadrant, 'Quadrant 1', 'Quadrant 2', 'Quadrant 3', 'Quadrant 4'), deadline ASC";
+    $result = mysqli_query($this->db, $sql);
+
+    $tasks = [];
+    if ($result) {
+        while ($row = mysqli_fetch_assoc($result)) {
+            $tasks[] = $row;
+        }
+    } else {
+        echo "Query Error: " . mysqli_error($this->db);
+    }
+
+    return $tasks;
+}
 
 }

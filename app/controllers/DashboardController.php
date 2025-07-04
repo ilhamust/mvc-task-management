@@ -16,15 +16,19 @@ class DashboardController extends Controller {
     require_once '../app/models/Tasks.php';
     $taskModel = new Tasks();
 
-    // Ambil semua task aktif
-    $allTasks = $taskModel->getActiveTasks();
+    // Ambil semua tasks tanpa filter status
+    $allTasks = $taskModel->getAllTasks(); // kamu perlu menambahkan method getAllTasks di models
+
+    // Ambil tasks active & completed untuk statistik
+    $activeTasks = $taskModel->getActiveTasks();
+    $completedTasks = $taskModel->getCompletedTasks();
 
     // Hitung statistik
     $totalTasks = count($allTasks);
-    $completedTasks = count($taskModel->getCompletedTasks());
-    $pendingTasks = $totalTasks; // karena hanya mengambil pending tasks di sini
+    $pendingTasks = count($activeTasks);
+    $completedTasksCount = count($completedTasks);
 
-    // Kelompokkan berdasarkan quadrant
+    // Kelompokkan berdasarkan quadrant (hanya untuk active tasks)
     $tasks = [
       'quadrant1' => [],
       'quadrant2' => [],
@@ -32,7 +36,7 @@ class DashboardController extends Controller {
       'quadrant4' => []
     ];
 
-    foreach ($allTasks as $task) {
+    foreach ($activeTasks as $task) {
       switch ($task['quadrant']) {
         case 'Quadrant 1':
           $tasks['quadrant1'][] = $task;
