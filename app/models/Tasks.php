@@ -7,9 +7,8 @@ class Tasks extends Model {
     }
 
     public function insertTask($title, $description, $deadline, $importance) {
-    $status = 'pending'; // default saat task dibuat
+    $status = 'pending'; 
 
-    // Tentukan urgency & quadrant sebelum insert
     $urgency = $this->determineUrgency($deadline);
     $quadrant = $this->determineQuadrant($importance, $urgency);
 
@@ -28,7 +27,6 @@ public function getActiveTasks() {
     $tasks = [];
     if ($result) {
         while ($row = mysqli_fetch_assoc($result)) {
-            // Tidak perlu menentukan quadrant di sini karena sudah ada di DB
             $tasks[] = $row;
         }
     } else {
@@ -68,15 +66,15 @@ public function getActiveTasks() {
 
 
     private function determineQuadrant($importance, $urgency) {
-    $importance = strtolower($importance); // normalize
+    $importance = strtolower($importance); 
     if ($importance == 'penting' && $urgency == 'Mendesak') {
-        return 'Quadrant 1'; // Important & Urgent
+        return 'Quadrant 1'; 
     } elseif ($importance == 'penting' && $urgency == 'Tidak Mendesak') {
-        return 'Quadrant 2'; // Important & Not Urgent
+        return 'Quadrant 2'; 
     } elseif ($importance == 'tidak penting' && $urgency == 'Mendesak') {
-        return 'Quadrant 3'; // Not Important & Urgent
+        return 'Quadrant 3'; 
     } else {
-        return 'Quadrant 4'; // Not Important & Not Urgent
+        return 'Quadrant 4'; 
     }
 }
 
@@ -91,7 +89,6 @@ public function getTaskById($id) {
 }
 
 public function updateTask($id, $title, $description, $deadline, $importance) {
-    // Tentukan ulang urgency & quadrant
     $urgency = $this->determineUrgency($deadline);
     $quadrant = $this->determineQuadrant($importance, $urgency);
 

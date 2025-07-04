@@ -12,23 +12,15 @@ class DashboardController extends Controller {
     $pageTitle = 'Dashboard';
     $pageSubtitle = 'Kelola tugas dengan metode Eisenhower Matrix';
 
-    // Load model Tasks
-    require_once '../app/models/Tasks.php';
     $taskModel = new Tasks();
-
-    // Ambil semua tasks tanpa filter status
-    $allTasks = $taskModel->getAllTasks(); // kamu perlu menambahkan method getAllTasks di models
-
-    // Ambil tasks active & completed untuk statistik
+    $allTasks = $taskModel->getAllTasks(); 
     $activeTasks = $taskModel->getActiveTasks();
     $completedTasks = $taskModel->getCompletedTasks();
 
-    // Hitung statistik
     $totalTasks = count($allTasks);
     $pendingTasks = count($activeTasks);
     $completedTasksCount = count($completedTasks);
 
-    // Kelompokkan berdasarkan quadrant (hanya untuk active tasks)
     $tasks = [
       'quadrant1' => [],
       'quadrant2' => [],
