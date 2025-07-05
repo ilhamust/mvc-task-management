@@ -56,7 +56,6 @@ public function delete($id) {
 }
 public function complete() {
   $taskId = $_POST['id'];
-  // Panggil model untuk update status menjadi selesai
   $taskModel = $this->model('Tasks');
   $taskModel->markAsCompleted($taskId);
 
@@ -65,7 +64,6 @@ public function complete() {
 }
 public function uncomplete() {
   $taskId = $_POST['id'];
-  // Panggil model untuk update status menjadi active/kembali belum selesai
   $taskModel = $this->model('Tasks');
   $taskModel->markAsActive($taskId);
 
